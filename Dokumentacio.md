@@ -2,7 +2,7 @@
 
 Egyszerű blogplatform: bejegyzések olvasása, kommentelés, regisztráció és bejelentkezés JWT alapon. Szerveroldali render (EJS) + JSON API. Relációs tárolás – lokálisan SQLite, éles környezetben PostgreSQL – Sequelize ORM-mel.
 
-**Élő demo:** <https://webprog-blog.onrender.com> (Render ingyenes tier — az első kérés ~50 mp, mert az instance alvó állapotból ébred).
+**Élő demo:** <https://webprog-blog.onrender.com> (Render ingyenes tier — az első kérés kb.50 mp, mert az instance alvó állapotból ébred).
 
 ## Funkciók
 
@@ -12,7 +12,7 @@ Egyszerű blogplatform: bejegyzések olvasása, kommentelés, regisztráció és
 - Saját bejegyzés létrehozása bejelentkezett felhasználóknak
 - Responzív felület (mobile-first CSS, `@media` töréspont)
 
-## Kiegészítő funkciók (a specifikációból)
+## Kiegészítő funkciók
 
 1. **ORM** – Sequelize (`src/models/index.js`).
 2. **Autentikáció (JWT)** – `jsonwebtoken` + `bcryptjs` (`src/middleware/auth.js`, `src/routes/auth.js`).
@@ -45,7 +45,7 @@ Express alkalmazás (src/app.js)
  `JWT_SECRET`  `dev-secret` JWT aláíró kulcs – éles környezetben kötelező cserélni 
  `DATABASE_URL`  `sqlite:./data/blog.sqlite` SQLite fájl (vagy `sqlite::memory:` teszthez)
 
-## Telepítés és futtatás
+## Telepítés és futtatás (Node.js-t szükséges telepíteni)
 
 ```bash
 npm install
@@ -125,7 +125,7 @@ Válasz: `{ "token": "<jwt>" }` és `Set-Cookie: token=<jwt>; HttpOnly`.
 
 A [`.github/workflows/ci.yml`](.github/workflows/ci.yml) workflow Node 20-on futtatja `npm install` + `npm test` parancsokat minden push és pull request eseményre a `main` ágon
 
-## Deploy (Render.com)
+## Deploy
 
 A repo gyökerében található [`render.yaml`](render.yaml) egy **Blueprint**: a Render automatikusan létrehoz egy ingyenes PostgreSQL-t és egy Web Service-t, a `DATABASE_URL`-t pedig automatikusan beköti a web service körynyezetébe
 
@@ -133,22 +133,22 @@ Blueprint részletek:
 - **Régió**: mind a web service, mind a Postgres `frankfurt` — azonos régió szükséges, különben a Render belső DB hostneve (`dpg-…-a`) nem oldódik fel
 - **Build parancs**: `npm install --omit=dev` (nincs commitolt `package-lock.json`, ezért nem `npm ci`).
 - **Start parancs**: `npm start`.
-- **Env változók**: `NODE_VERSION=20`, `JWT_SECRET` (auto-generált), `DATABASE_URL` (a Postgres connection stringje `fromDatabase` kötéssel)
+- **Env változók**: `NODE_VERSION=24`, `JWT_SECRET` (auto-generált), `DATABASE_URL` (a Postgres connection stringje `fromDatabase` kötéssel)
 - **Auto-deploy**: minden `main`-re történő push automatikusan új deploy-t indít
 
 Telepítés első alkalommal:
-1. Push a repót GitHub-ra.
-2. Render.com → **New → Blueprint** → válaszd ki a repót → Appl
+1. Push a repót Github-ra
+2. Render.com → **New → Blueprint** → select repó → Apply
 3. Meg kell várni, amíg a Postgres `Available` állapotba ér, utána a web service magától elindul
 
 A `src/config/db.js` a `DATABASE_URL` alapján dönt a dialektusról:
 - `postgres://…` / `postgresql://…` → PostgreSQL, `ssl: { rejectUnauthorized: false }` (Render prod)
 - `sqlite::memory:` → in-memory SQLite (tesztek)
-- bármi más / hiányzó → helyi SQLite fájl (`data/blog.sqlite`)
+
 
 Így **nincs két külön konfig** – lokálisan SQLite-tal fejleszthető, Renderen Postgres-sel fut, tesztben memóriában.
 
-## Git előzmények (elvárt struktúra)
+## Git előzmények (struktúra)
 
 1. `chore: project scaffolding (package.json, .gitignore, env example)`
 2. `feat: Sequelize setup and database models (User, Post, Comment)`
