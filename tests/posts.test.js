@@ -46,6 +46,7 @@ describe('Posts API', () => {
   it('POST /api/posts/:id/comments requires auth', async () => {
     const res = await request(app)
       .post(`/api/posts/${postId}/comments`)
+      .set('Accept', 'application/json')
       .send({ body: 'hi' });
     expect(res.status).toBe(401);
   });
