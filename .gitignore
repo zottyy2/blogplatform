@@ -1,0 +1,8 @@
+node_modules/
+.env
+*.sqlite
+*.sqlite3
+data/
+coverage/
+.DS_Store
+Projektfeladat1.xlsx
