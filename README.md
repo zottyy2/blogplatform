@@ -138,6 +138,23 @@ Válasz: `{ "token": "<jwt>" }` és `Set-Cookie: token=<jwt>; HttpOnly`.
 
 A `.github/workflows/ci.yml` workflow Node 20-on futtatja `npm ci` + `npm test` parancsokat push és pull request eseményre a `main` ágon.
 
+## Deploy (Render.com)
+
+A repo gyökerében található [`render.yaml`](render.yaml) egy **Blueprint**: git pusholás után a Render automatikusan létrehoz egy ingyenes Postgres-t és egy Web Service-t, a `DATABASE_URL`-t pedig automatikusan beköti.
+
+Lépések:
+1. Push a repót GitHub-ra (pl. `git remote add origin ... && git push -u origin main`).
+2. Render.com → **New → Blueprint** → válaszd ki a repót.
+3. Render felolvassa a `render.yaml`-t, létrehozza a Postgres-t + a web service-t, a `JWT_SECRET`-et auto-generálja.
+4. Minden `main`-re történő push automatikusan redeploy-t indít (`autoDeploy: true`).
+
+A `src/config/db.js` a `DATABASE_URL` alapján dönt:
+- `postgres://...` / `postgresql://...` → Postgres (Render prod)
+- `sqlite::memory:` → in-memory (tesztek)
+- bármi más / hiányzó → helyi SQLite fájl (`data/blog.sqlite`)
+
+Így **nincs két külön konfig** – lokálisan SQLite-tal fejlesztesz, Rendere Postgres-sel fut.
+
 ## Git előzmények (elvárt struktúra)
 
 1. `chore: project scaffolding`

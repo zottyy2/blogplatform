@@ -4,9 +4,19 @@ const fs = require('fs');
 
 function createSequelize() {
   const url = process.env.DATABASE_URL;
+
+  if (url && /^postgres(ql)?:\/\//i.test(url)) {
+    return new Sequelize(url, {
+      dialect: 'postgres',
+      logging: false,
+      dialectOptions: { ssl: { require: true, rejectUnauthorized: false } },
+    });
+  }
+
   if (url === 'sqlite::memory:' || url === ':memory:') {
     return new Sequelize('sqlite::memory:', { logging: false });
   }
+
   const storage = url
     ? url.replace(/^sqlite:/, '')
     : path.join(__dirname, '..', '..', 'data', 'blog.sqlite');
