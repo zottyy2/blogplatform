@@ -2,7 +2,7 @@
 
 Egyszerű blogplatform: bejegyzések olvasása, kommentelés, regisztráció és bejelentkezés JWT alapon. Szerveroldali render (EJS) + JSON API. Relációs tárolás – lokálisan SQLite, éles környezetben PostgreSQL – Sequelize ORM-mel.
 
-**Élő demo:** <https://webprog-blog.onrender.com> (Render ingyenes tier — az első kérés kb.50 mp, mert az instance alvó állapotból ébred).
+**Élő demo:** <https://webprog-blog.onrender.com> (Render ingyenes tier ; az első kérés kb.50 mp, mert az instance alvó állapotból ébred).
 **Github:** <https://github.com/zottyy2/blogplatform>
 
 ## Funkciók
