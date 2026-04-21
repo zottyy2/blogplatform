@@ -23,7 +23,8 @@ async function attachUser(req, _res, next) {
 
 function requireAuth(req, res, next) {
   if (!req.user) {
-    if (req.accepts('html') && !req.path.startsWith('/api')) return res.redirect('/auth/login');
+    const isApi = req.originalUrl.startsWith('/api');
+    if (!isApi && req.accepts('html')) return res.redirect('/auth/login');
     return res.status(401).json({ error: 'unauthorized' });
   }
   next();
