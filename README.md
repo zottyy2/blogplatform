@@ -1,6 +1,8 @@
 # Webprog Blog
 
-Egyszerű blogplatform: bejegyzések olvasása, kommentelés, regisztráció és bejelentkezés JWT alapon. Szerveroldali render (EJS) + JSON API. Relációs tárolás SQLite-on Sequelize ORM-mel.
+Egyszerű blogplatform: bejegyzések olvasása, kommentelés, regisztráció és bejelentkezés JWT alapon. Szerveroldali render (EJS) + JSON API. Relációs tárolás – lokálisan SQLite, éles környezetben PostgreSQL – Sequelize ORM-mel.
+
+**Élő demo:** <https://webprog-blog.onrender.com> (Render ingyenes tier — az első kérés ~50 mp, mert az instance alvó állapotból ébred).
 
 ## Funkciók
 
@@ -136,30 +138,40 @@ Válasz: `{ "token": "<jwt>" }` és `Set-Cookie: token=<jwt>; HttpOnly`.
 
 ## CI
 
-A `.github/workflows/ci.yml` workflow Node 20-on futtatja `npm ci` + `npm test` parancsokat push és pull request eseményre a `main` ágon.
+A [`.github/workflows/ci.yml`](.github/workflows/ci.yml) workflow Node 20-on futtatja `npm install` + `npm test` parancsokat minden push és pull request eseményre a `main` ágon.
 
 ## Deploy (Render.com)
 
-A repo gyökerében található [`render.yaml`](render.yaml) egy **Blueprint**: git pusholás után a Render automatikusan létrehoz egy ingyenes Postgres-t és egy Web Service-t, a `DATABASE_URL`-t pedig automatikusan beköti.
+A repo gyökerében található [`render.yaml`](render.yaml) egy **Blueprint**: a Render automatikusan létrehoz egy ingyenes PostgreSQL-t és egy Web Service-t, a `DATABASE_URL`-t pedig automatikusan beköti a web service környezetébe.
 
-Lépések:
-1. Push a repót GitHub-ra (pl. `git remote add origin ... && git push -u origin main`).
-2. Render.com → **New → Blueprint** → válaszd ki a repót.
-3. Render felolvassa a `render.yaml`-t, létrehozza a Postgres-t + a web service-t, a `JWT_SECRET`-et auto-generálja.
-4. Minden `main`-re történő push automatikusan redeploy-t indít (`autoDeploy: true`).
+Blueprint részletek:
+- **Régió**: mind a web service, mind a Postgres `frankfurt` — azonos régió szükséges, különben a Render belső DB hostneve (`dpg-…-a`) nem oldódik fel.
+- **Build parancs**: `npm install --omit=dev` (nincs commitolt `package-lock.json`, ezért nem `npm ci`).
+- **Start parancs**: `npm start`.
+- **Env változók**: `NODE_VERSION=20`, `JWT_SECRET` (auto-generált), `DATABASE_URL` (a Postgres connection stringje `fromDatabase` kötéssel).
+- **Auto-deploy**: minden `main`-re történő push automatikusan új deploy-t indít.
 
-A `src/config/db.js` a `DATABASE_URL` alapján dönt:
-- `postgres://...` / `postgresql://...` → Postgres (Render prod)
-- `sqlite::memory:` → in-memory (tesztek)
+Telepítés első alkalommal:
+1. Push a repót GitHub-ra.
+2. Render.com → **New → Blueprint** → válaszd ki a repót → Apply.
+3. Várd meg, amíg a Postgres `Available` állapotba ér, utána a web service magától elindul.
+4. A publikus URL (`https://<service-name>.onrender.com`) a web service lap tetején jelenik meg.
+
+A `src/config/db.js` a `DATABASE_URL` alapján dönt a dialektusról:
+- `postgres://…` / `postgresql://…` → PostgreSQL, `ssl: { rejectUnauthorized: false }` (Render prod)
+- `sqlite::memory:` → in-memory SQLite (tesztek)
 - bármi más / hiányzó → helyi SQLite fájl (`data/blog.sqlite`)
 
-Így **nincs két külön konfig** – lokálisan SQLite-tal fejlesztesz, Rendere Postgres-sel fut.
+Így **nincs két külön konfig** – lokálisan SQLite-tal fejlesztesz, Renderen Postgres-sel fut, tesztben memóriában.
 
 ## Git előzmények (elvárt struktúra)
 
-1. `chore: project scaffolding`
-2. `feat: database models and Sequelize setup`
-3. `feat: posts and comments routes with EJS views`
-4. `feat: JWT-based auth and protected routes`
-5. `test: integration tests for posts and auth`
-6. `ci: GitHub Actions workflow`
+1. `chore: project scaffolding (package.json, .gitignore, env example)`
+2. `feat: Sequelize setup and database models (User, Post, Comment)`
+3. `feat: posts and comments routes with responsive EJS views`
+4. `feat: JWT-based auth, protected routes, and JSON API`
+5. `test: integration tests for posts API and auth flow`
+6. `ci: GitHub Actions workflow and project documentation`
+7. `feat: Render.com deploy with Postgres + auto-dialect switch in config`
+8. `fix: use npm install (no lockfile committed) for Render build and CI`
+9. `fix: pin Postgres region to frankfurt to match web service`
