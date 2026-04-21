@@ -1,4 +1,3 @@
-const { describe, it, expect, beforeAll } = require('vitest');
 const request = require('supertest');
 const bcrypt = require('bcryptjs');
 
