@@ -1,6 +1,7 @@
 databases:
   - name: webprog-blog-db
     plan: free
+    region: frankfurt
     databaseName: webprog_blog
     postgresMajorVersion: 16
 
