@@ -1,0 +1,9 @@
+<%- include('partials/header') %>
+<h1>Új bejegyzés</h1>
+<% if (error) { %><p class="error"><%= error %></p><% } %>
+<form method="post" action="/posts" class="auth-form">
+  <label>Cím <input name="title" required></label>
+  <label>Tartalom <textarea name="content" rows="8" required></textarea></label>
+  <button type="submit">Közzététel</button>
+</form>
+<%- include('partials/footer') %>

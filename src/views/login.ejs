@@ -1,0 +1,9 @@
+<%- include('partials/header') %>
+<h1>Belépés</h1>
+<% if (error) { %><p class="error"><%= error %></p><% } %>
+<form method="post" action="/auth/login" class="auth-form">
+  <label>Felhasználónév <input name="username" required></label>
+  <label>Jelszó <input name="password" type="password" required></label>
+  <button type="submit">Belépés</button>
+</form>
+<%- include('partials/footer') %>

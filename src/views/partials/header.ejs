@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blog</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="/">Blog</a>
+  <nav>
+    <% if (user) { %>
+      <span class="nav-user">Üdv, <%= user.username %>!</span>
+      <a href="/posts/new">Új bejegyzés</a>
+      <form action="/auth/logout" method="post" class="inline"><button type="submit">Kilépés</button></form>
+    <% } else { %>
+      <a href="/auth/login">Belépés</a>
+      <a href="/auth/register">Regisztráció</a>
+    <% } %>
+  </nav>
+</header>
+<main class="container">

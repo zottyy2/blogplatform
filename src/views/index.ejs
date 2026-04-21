@@ -1,0 +1,14 @@
+<%- include('partials/header') %>
+<h1>Bejegyzések</h1>
+<% if (posts.length === 0) { %>
+  <p>Nincs még bejegyzés.</p>
+<% } %>
+<ul class="post-list">
+  <% posts.forEach(p => { %>
+    <li class="post-card">
+      <h2><a href="/posts/<%= p.id %>"><%= p.title %></a></h2>
+      <p class="meta">Szerző: <%= p.author ? p.author.username : 'ismeretlen' %> · <%= p.createdAt.toISOString().slice(0,10) %></p>
+    </li>
+  <% }) %>
+</ul>
+<%- include('partials/footer') %>

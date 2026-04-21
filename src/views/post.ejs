@@ -1,0 +1,26 @@
+<%- include('partials/header') %>
+<article class="post">
+  <h1><%= post.title %></h1>
+  <p class="meta">Szerző: <%= post.author ? post.author.username : 'ismeretlen' %></p>
+  <div class="content"><%= post.content %></div>
+</article>
+
+<section class="comments">
+  <h2>Kommentek (<%= post.Comments.length %>)</h2>
+  <% post.Comments.forEach(c => { %>
+    <div class="comment">
+      <strong><%= c.author ? c.author.username : 'ismeretlen' %></strong>
+      <p><%= c.body %></p>
+    </div>
+  <% }) %>
+
+  <% if (user) { %>
+    <form action="/posts/<%= post.id %>/comments" method="post" class="comment-form">
+      <textarea name="body" rows="3" placeholder="Írj egy kommentet..." required></textarea>
+      <button type="submit">Küldés</button>
+    </form>
+  <% } else { %>
+    <p><a href="/auth/login">Jelentkezz be</a> a kommenteléshez.</p>
+  <% } %>
+</section>
+<%- include('partials/footer') %>
