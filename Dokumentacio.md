@@ -4,6 +4,7 @@ Egyszerű blogplatform: bejegyzések olvasása, kommentelés, regisztráció és
 
 **Élő demo:** <https://webprog-blog.onrender.com> (Render ingyenes tier ; az első kérés kb.50 mp, mert az instance alvó állapotból ébred).
 **Github:** <https://github.com/zottyy2/blogplatform>
+**Elevator pitch videó link:** https://gdfhu-my.sharepoint.com/:v:/g/personal/qw6jut_neptun_gde_hu/IQC6xyx4xghMS709FsPiAnVkAeCNbvznKRPCKLYCoLsB0tY?e=e181f9&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D
 
 ## Funkciók
 
